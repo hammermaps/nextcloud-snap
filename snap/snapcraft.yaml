@@ -365,9 +365,16 @@ parts:
       - -DWITH_INNODB_EXTRA_DEBUG=OFF
       - -DINSTALL_MYSQLTESTDIR=
       - -DDOWNLOAD_BOOST=OFF
+      # Boost 1.84.0 is bundled in the MySQL 8.4.7 GitHub release
       - -DWITH_BOOST=$SNAPCRAFT_PART_SRC/extra/boost/boost_1_84_0
 
     override-build: |
+      # Verify boost directory exists (bundled in MySQL GitHub release)
+      if [ ! -d "$SNAPCRAFT_PART_SRC/extra/boost/boost_1_84_0" ]; then
+        echo "Error: Expected boost directory not found at $SNAPCRAFT_PART_SRC/extra/boost/boost_1_84_0"
+        echo "This may indicate a change in MySQL source structure."
+        exit 1
+      fi
       snapcraftctl build
       # MySQL v8 is massive. Strip it.
       find "$SNAPCRAFT_PART_INSTALL/bin" -type f -exec sh -c 'grep -IL . "$1" || strip --strip-all "$1"' sh "{}" \;
