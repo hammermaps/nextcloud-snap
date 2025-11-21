@@ -441,8 +441,16 @@ parts:
     after: [patches]
     override-build: |
       snapcraftctl build
-      patch -p1 -d $SNAPCRAFT_PART_INSTALL/lib/python3.*/site-packages/certbot < $SNAPCRAFT_STAGE/certbot-remove-default-config-files.patch || true
-      patch -p1 -d $SNAPCRAFT_PART_INSTALL/lib/python3.*/site-packages/certbot < $SNAPCRAFT_STAGE/certbot-remove-storage-chown.patch || true
+      # Apply patches if they exist and certbot directory exists
+      CERTBOT_DIR=$(find $SNAPCRAFT_PART_INSTALL/lib -type d -name "certbot" -path "*/site-packages/*" 2>/dev/null | head -1)
+      if [ -n "$CERTBOT_DIR" ]; then
+        if [ -f "$SNAPCRAFT_STAGE/certbot-remove-default-config-files.patch" ]; then
+          patch -p1 -d "$CERTBOT_DIR" < $SNAPCRAFT_STAGE/certbot-remove-default-config-files.patch || echo "Warning: certbot-remove-default-config-files.patch failed to apply"
+        fi
+        if [ -f "$SNAPCRAFT_STAGE/certbot-remove-storage-chown.patch" ]; then
+          patch -p1 -d "$CERTBOT_DIR" < $SNAPCRAFT_STAGE/certbot-remove-storage-chown.patch || echo "Warning: certbot-remove-storage-chown.patch failed to apply"
+        fi
+      fi
 
   setup-https:
     plugin: dump
