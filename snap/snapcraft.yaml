@@ -7,7 +7,7 @@ description: |
 
 grade: stable
 confinement: strict
-base: core18
+base: core22
 
 architectures:
   - build-on: amd64
@@ -254,6 +254,9 @@ parts:
 
       # This is no longer bundled with PHP as of v7.4
       - libonig-dev
+
+      # ImageMagick library for imagick extension
+      - libmagickwand-dev
     stage-packages:
       - libasn1-8-heimdal
       - libcurl4
@@ -263,10 +266,10 @@ parts:
       - libheimbase1-heimdal
       - libheimntlm0-heimdal
       - libhx509-5-heimdal
-      - libicu60
+      - libicu70
       - libjpeg8
       - libkrb5-26-heimdal
-      - libldap-2.4-2
+      - libldap-2.5-0
       - libnghttp2-14
       - libpng16-16
       - libpsl5
@@ -276,11 +279,15 @@ parts:
       - libwind0-heimdal
       - libxml2
       - libzip4
-      - libargon2-0
-      - libonig4
+      - libargon2-1
+      - libonig5
       - libsodium23
       - libaio1
       - libsqlite3-0
+
+      # ImageMagick libraries for imagick extension
+      - libmagickwand-6.q16-6
+      - libmagickcore-6.q16-6-extra
     prime:
      - -sbin/
      - -etc/
@@ -292,9 +299,17 @@ parts:
       - source: https://github.com/phpredis/phpredis/archive/6.2.0.tar.gz
         source-checksum: sha256/470333b27cbf9485d36b610b81300c06491a6575f22c6801a9cefc55285ed123
 
+      # Build the apcu PHP module
+      - source: https://pecl.php.net/get/apcu-5.1.27.tgz
+        source-checksum: sha256:5c28a55b27082c69657e25b7ecf553e2cf6b74ec3fa77d6b76f4fb982e001e43
+
+      # Build the imagick PHP module
+      - source: https://pecl.php.net/get/imagick-3.8.0.tgz
+        source-checksum: sha256:5a364354109029d224bcbb2e82e15b248be9b641227f45e63425c06531792d3e
+
   redis:
     plugin: redis
-    source: https://download.redis.io/releases/redis-7.2.10.tar.gz
+    source: https://github.com/redis/redis/archive/refs/tags/8.4.0.tar.gz
     source-checksum: sha256/e576ad54bc53770649c556933ecd555b975e3dac422e46356102436a437b43c7
 
   redis-customizations:
@@ -340,7 +355,7 @@ parts:
     after: [boost]
 
     # Get from https://dev.mysql.com/downloads/mysql/
-    source: https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-boost-8.0.43.tar.gz
+    source: https://dev.mysql.com/get/Downloads/MySQL-8.4/mysql-boost-8.4.3.tar.gz
     source-checksum: md5/5f44ad3ef68dc943e145f26574dcf435
     configflags:
       - -DCMAKE_INSTALL_PREFIX=/

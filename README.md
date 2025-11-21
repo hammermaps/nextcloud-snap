@@ -5,8 +5,8 @@ Nextcloud server packaged as a snap. It consists of:
 - Nextcloud 32
 - Apache 2.4
 - PHP 8.4
-- MySQL 8.0
-- Redis 7.2
+- MySQL 8.4
+- Redis 8.4
 
 ## How to install
 
