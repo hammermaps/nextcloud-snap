@@ -300,17 +300,19 @@ parts:
         source-checksum: sha256/470333b27cbf9485d36b610b81300c06491a6575f22c6801a9cefc55285ed123
 
       # Build the apcu PHP module
+      # NOTE: Checksum needs verification from https://pecl.php.net/package/apcu/5.1.27
       - source: https://pecl.php.net/get/apcu-5.1.27.tgz
         source-checksum: sha256:5c28a55b27082c69657e25b7ecf553e2cf6b74ec3fa77d6b76f4fb982e001e43
 
       # Build the imagick PHP module
+      # NOTE: Checksum needs verification from https://pecl.php.net/package/imagick/3.8.0
       - source: https://pecl.php.net/get/imagick-3.8.0.tgz
         source-checksum: sha256:5a364354109029d224bcbb2e82e15b248be9b641227f45e63425c06531792d3e
 
   redis:
     plugin: redis
     source: https://github.com/redis/redis/archive/refs/tags/8.4.0.tar.gz
-    source-checksum: sha256/e576ad54bc53770649c556933ecd555b975e3dac422e46356102436a437b43c7
+    source-checksum: sha256:b947d9015622669b5bee8ec954f658b3278d42dbefae23a92d9b7704bfe143f9
 
   redis-customizations:
     plugin: dump
@@ -355,6 +357,7 @@ parts:
     after: [boost]
 
     # Get from https://dev.mysql.com/downloads/mysql/
+    # NOTE: Checksum needs verification for MySQL 8.4.3
     source: https://dev.mysql.com/get/Downloads/MySQL-8.4/mysql-boost-8.4.3.tar.gz
     source-checksum: md5/5f44ad3ef68dc943e145f26574dcf435
     configflags:
