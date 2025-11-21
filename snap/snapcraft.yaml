@@ -342,24 +342,13 @@ parts:
       # The collabora appimage requires this
       - libfontconfig1
 
-  boost:
-    plugin: dump
-    source: https://sourceforge.net/projects/boost/files/boost/1.77.0/boost_1_77_0.tar.bz2
-    source-checksum: sha1/0cb4f947d094fc311e13ffacaff00418130ef5ef
-    stage:
-      - boost/
-    prime:
-      - -*
-
   mysql:
     build-snaps: [cmake]
     plugin: cmake
-    after: [boost]
 
-    # Get from https://dev.mysql.com/downloads/mysql/
-    # NOTE: Checksum needs verification for MySQL 8.4.3
-    source: https://dev.mysql.com/get/Downloads/MySQL-8.4/mysql-boost-8.4.3.tar.gz
-    source-checksum: md5/5f44ad3ef68dc943e145f26574dcf435
+    # Get from https://github.com/mysql/mysql-server/releases/tag/mysql-8.4.7
+    source: https://github.com/mysql/mysql-server/archive/refs/tags/mysql-8.4.7.tar.gz
+    source-checksum: sha256/fadcbeb1a4f742d946e33cab82f922330c67820275bc48c5b4b0449393b154cd
     configflags:
       - -DCMAKE_INSTALL_PREFIX=/
       - -DBUILD_CONFIG=mysql_release
@@ -376,9 +365,16 @@ parts:
       - -DWITH_INNODB_EXTRA_DEBUG=OFF
       - -DINSTALL_MYSQLTESTDIR=
       - -DDOWNLOAD_BOOST=OFF
-      - -DWITH_BOOST=$SNAPCRAFT_STAGE
+      # Boost 1.84.0 is bundled in the MySQL 8.4.7 GitHub release
+      - -DWITH_BOOST=$SNAPCRAFT_PART_SRC/extra/boost/boost_1_84_0
 
     override-build: |
+      # Verify boost directory exists (bundled in MySQL GitHub release)
+      if [ ! -d "$SNAPCRAFT_PART_SRC/extra/boost/boost_1_84_0" ]; then
+        echo "Error: Expected boost directory not found at $SNAPCRAFT_PART_SRC/extra/boost/boost_1_84_0"
+        echo "This may indicate a change in MySQL source structure."
+        exit 1
+      fi
       snapcraftctl build
       # MySQL v8 is massive. Strip it.
       find "$SNAPCRAFT_PART_INSTALL/bin" -type f -exec sh -c 'grep -IL . "$1" || strip --strip-all "$1"' sh "{}" \;
