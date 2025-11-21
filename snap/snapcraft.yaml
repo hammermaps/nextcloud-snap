@@ -300,14 +300,12 @@ parts:
         source-checksum: sha256/470333b27cbf9485d36b610b81300c06491a6575f22c6801a9cefc55285ed123
 
       # Build the apcu PHP module
-      # NOTE: Checksum needs verification from https://pecl.php.net/package/apcu/5.1.27
       - source: https://pecl.php.net/get/apcu-5.1.27.tgz
-        source-checksum: sha256:5c28a55b27082c69657e25b7ecf553e2cf6b74ec3fa77d6b76f4fb982e001e43
+        source-checksum: sha256:1a2c37fcad2ae2a1aea779cd6ca9353d8b38d4e27dde2327c52ff3892dfadb3f
 
       # Build the imagick PHP module
-      # NOTE: Checksum needs verification from https://pecl.php.net/package/imagick/3.8.0
       - source: https://pecl.php.net/get/imagick-3.8.0.tgz
-        source-checksum: sha256:5a364354109029d224bcbb2e82e15b248be9b641227f45e63425c06531792d3e
+        source-checksum: sha256:bda67461c854f20d6105782b769c524fc37388b75d4481d951644d2167ffeec6
 
   redis:
     plugin: redis
