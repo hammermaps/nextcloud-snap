@@ -45,8 +45,9 @@ $CONFIG = array(
 	'mysql',
 ),
 
+'memcache.local' => '\OC\Memcache\APCu',
+'memcache.distributed' => '\OC\Memcache\Redis',
 'memcache.locking' => '\OC\Memcache\Redis',
-'memcache.local' => '\OC\Memcache\Redis',
 'redis' => array(
     'host' => getenv('REDIS_SOCKET'),
     'port' => 0,
